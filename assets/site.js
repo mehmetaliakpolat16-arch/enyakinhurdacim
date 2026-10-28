@@ -42,3 +42,28 @@ document.addEventListener("click", function (e) {
   window.dataLayer = window.dataLayer || [];
   window.dataLayer.push({ event: "firma_arama", firma_id: a.getAttribute("data-firma") || "" });
 }, true);
+
+// Grafikler: üzerine gelince (ya da dokununca) yıl ve değer ipucu + dikey çizgi.
+(function () {
+  function fmt(v) { return v.toLocaleString("tr-TR", { maximumFractionDigits: v < 100 ? 1 : 0 }); }
+  document.querySelectorAll("figure.chart").forEach(function (fig) {
+    var d = JSON.parse(fig.getAttribute("data-chart"));
+    var svg = fig.querySelector("svg"), tip = fig.querySelector(".chart-tip"), cross = svg.querySelector(".cross");
+    function show(r) {
+      var i = +r.getAttribute("data-i"), cx = +r.getAttribute("x") + +r.getAttribute("width") / 2;
+      cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.style.opacity = 1;
+      tip.innerHTML = "<b>" + d.y[i] + (d.y[i] === "2026" ? " (ilk aylar)" : "") + "</b>" + d.s.map(function (s) {
+        return '<span><i style="background:' + s.c + '"></i>' + (d.s.length > 1 ? s.n + ": " : "") + fmt(s.v[i]) + "</span>";
+      }).join("") + "<small>" + d.u + "</small>";
+      tip.hidden = false;
+      var box = svg.getBoundingClientRect(), x = cx / svg.viewBox.baseVal.width * box.width;
+      tip.style.left = Math.min(Math.max(x - tip.offsetWidth / 2, 0), box.width - tip.offsetWidth) + "px";
+    }
+    function hide() { tip.hidden = true; cross.style.opacity = 0; }
+    svg.querySelectorAll(".hit").forEach(function (r) {
+      r.addEventListener("mouseenter", function () { show(r); });
+      r.addEventListener("click", function () { show(r); });
+    });
+    svg.addEventListener("mouseleave", hide);
+  });
+})();

@@ -84,3 +84,29 @@ section{padding:34px 0}
 .art-card span{margin-top:auto;color:var(--rust-d);font-weight:700;font-size:.9rem}
 @media (max-width:900px){.regions{grid-template-columns:1fr 1fr}.nav a:first-child{display:none}}
 @media (max-width:560px){.regions{grid-template-columns:1fr}.cards{grid-template-columns:1fr}.near{padding:18px}.btn--big{width:100%;justify-content:center}}
+.chart{margin:1.6em 0;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:16px 16px 10px}
+.chart figcaption{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;margin-bottom:6px}
+.chart figcaption b{font-size:1rem;color:var(--ink)}
+.chart figcaption span{font-size:.85rem;color:var(--mut)}
+.chart-legend{list-style:none;display:flex;flex-wrap:wrap;gap:4px 16px;padding:0!important;margin:4px 0 8px;font-size:.88rem;color:var(--ink2)}
+.chart-legend li{margin:0!important;color:var(--ink2)!important}
+.chart-legend i,.chart-tip i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.chart-plot{position:relative}
+.chart svg{width:100%;height:auto;display:block;overflow:visible}
+.chart .grid line{stroke:#ece6dc;stroke-width:1}
+.chart .grid text,.chart .xl text{fill:var(--mut);font-size:12px}
+.chart .cross{stroke:#9aa4a7;stroke-width:1;stroke-dasharray:3 3;opacity:0}
+.chart .hit{fill:transparent;cursor:crosshair}
+.chart-tip{position:absolute;top:-6px;background:var(--ink);color:#fff;border-radius:8px;padding:6px 10px;font-size:.84rem;line-height:1.45;pointer-events:none;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.18)}
+.chart-tip b,.chart-tip span,.chart-tip small{display:block}
+.chart-tip small{color:#c9d2d4}
+.chart-src{font-size:.8rem!important;color:var(--mut)!important;margin:6px 0 4px;line-height:1.5}
+.chart-table summary{cursor:pointer;font-size:.86rem;color:var(--rust-d);font-weight:600;padding:4px 0}
+.chart-table table{border-collapse:collapse;font-size:.86rem;margin:8px 0;width:100%;font-variant-numeric:tabular-nums}
+.chart-table th,.chart-table td{border-bottom:1px solid var(--line);padding:4px 8px;text-align:right}
+.chart-table th:first-child{text-align:left}
+.art-faq{margin-top:2em}
+.art-faq details p{color:#2f3b3f}
+.data-table{border-collapse:collapse;width:100%;font-size:.92rem;margin:1em 0;font-variant-numeric:tabular-nums}
+.data-table th,.data-table td{border-bottom:1px solid var(--line);padding:6px 8px;text-align:left}
+@media (max-width:640px){.data-table{display:block;overflow-x:auto;white-space:nowrap}.chart{padding:12px 10px 8px}.chart-table table{font-size:.8rem}}
