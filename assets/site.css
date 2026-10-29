@@ -116,3 +116,35 @@ section{padding:34px 0}
 .pager [aria-current]{background:var(--ink);color:#fff;border-color:var(--ink)}
 .pager a:hover{border-color:var(--rust)}
 .pager__nav{color:var(--rust-d)!important}
+/* Firmanın doğruladığı ek bilgiler (kartta tablo) */
+.card__ek{width:100%;border-collapse:collapse;font-size:.86rem;margin:4px 0 2px;border:1px solid var(--line)}
+.card__ek caption{caption-side:bottom;text-align:left;font-size:.74rem;color:var(--ok);font-weight:600;padding-top:5px}
+.card__ek caption svg{width:14px;height:14px;vertical-align:-2px;margin-right:3px}
+.card__ek th,.card__ek td{padding:6px 9px;border-bottom:1px solid var(--line);vertical-align:top;text-align:left}
+.card__ek tr:last-child th,.card__ek tr:last-child td{border-bottom:0}
+.card__ek th{width:34%;background:var(--sand);font-weight:600;color:var(--ink2)}
+.card__ek td{overflow-wrap:anywhere}
+.card__ek td span{display:inline-block;background:var(--sand);border:1px solid var(--line);border-radius:6px;padding:0 6px;margin:1px 3px 1px 0;font-size:.8rem}
+.card__src a{color:#8a9497}
+/* Bilgi ekleme formu */
+.ekform{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:16px}
+.ekform__firma{border-collapse:collapse;width:100%;font-size:.95rem}
+.ekform__firma th,.ekform__firma td{padding:7px 10px;border:1px solid var(--line);text-align:left}
+.ekform__firma th{width:30%;background:var(--sand)}
+.fld{display:flex;flex-direction:column;gap:5px;border:0;padding:0;margin:0;min-width:0}
+.fld>span,.fld legend{font-weight:700;padding:0}
+.fld b{color:var(--rust)}
+.fld small{color:var(--mut)}
+.fld input{font:inherit;padding:11px 12px;border:1.5px solid var(--line);border-radius:10px;background:#fff;width:100%;box-sizing:border-box}
+.fld input:focus{outline:2px solid var(--rust);outline-offset:1px;border-color:var(--rust)}
+.chks{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:6px;margin-top:6px}
+.chk{display:flex;align-items:flex-start;gap:8px;cursor:pointer}
+.chks .chk{border:1px solid var(--line);border-radius:8px;padding:7px 9px;background:#fff}
+.chks .chk:has(input:checked){border-color:var(--ok);background:#eef6f0}
+.chk input{width:18px;height:18px;margin:2px 0 0;accent-color:var(--ok);flex:none}
+.chk--onay{font-size:.9rem;color:var(--ink2)}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.ekform__msg{margin:0;padding:12px 14px;border-radius:10px;background:var(--sand);border:1px solid var(--line)}
+.ekform__msg.is-ok{background:#eef6f0;border-color:#b9d9c4;color:#1f5a37}
+.ekform__msg.is-err{background:#fbeee8;border-color:#efc3ad;color:#8a3410}
+.ekform button[disabled]{opacity:.6;cursor:wait}
