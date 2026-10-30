@@ -35,6 +35,114 @@
   });
 })();
 
+// İl ve ilçe arama çubuğu: /arama.json ilk odaklanmada yüklenir.
+(function () {
+  var veri = null;
+  function fold(s) {
+    return String(s).replace(/İ/g, "i").replace(/I/g, "ı").toLowerCase().replace(/[ıçğöşü]/g, function (c) { return { "ı": "i", "ç": "c", "ğ": "g", "ö": "o", "ş": "s", "ü": "u" }[c]; });
+  }
+  function yukle() {
+    if (!veri) veri = fetch("/arama.json").then(function (r) { return r.json(); }).then(function (a) {
+      a.forEach(function (x) { x.f = fold(x.a); }); return a;
+    });
+    return veri;
+  }
+  function ekr(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  document.querySelectorAll("[data-ara]").forEach(function (form) {
+    var inp = form.querySelector("input"), list = form.querySelector(".ara__list"), etkin = -1, sonuc = [];
+    function kapat() { list.hidden = true; inp.setAttribute("aria-expanded", "false"); etkin = -1; }
+    function isaretle() {
+      [].forEach.call(list.children, function (li, i) { li.setAttribute("aria-selected", String(i === etkin)); });
+    }
+    function ara() {
+      var q = fold(inp.value.trim());
+      if (q.length < 2) { kapat(); return; }
+      yukle().then(function (a) {
+        sonuc = a.filter(function (x) { return x.f.indexOf(q) >= 0; }).sort(function (x, y) {
+          return (y.f.indexOf(q) === 0) - (x.f.indexOf(q) === 0) || (!!x.p) - (!!y.p) || y.n - x.n;
+        }).slice(0, 8);
+        list.innerHTML = sonuc.length ? sonuc.map(function (x) {
+          return '<li role="option" aria-selected="false"><a href="' + x.u + '"><b>' + ekr(x.a) + "</b><small>" + (x.p ? ekr(x.p) + " ilçesi" : "İl") + "</small><span>" + (x.n ? x.n + " firma" : "Yakındakiler") + "</span></a></li>";
+        }).join("") : '<li class="ara__yok">Sonuç bulunamadı. Tüm illere aşağıdan bakabilirsiniz.</li>';
+        list.hidden = false; inp.setAttribute("aria-expanded", "true"); etkin = -1;
+      }).catch(kapat);
+    }
+    inp.addEventListener("focus", yukle);
+    inp.addEventListener("input", ara);
+    inp.addEventListener("keydown", function (ev) {
+      if (ev.key === "ArrowDown" || ev.key === "ArrowUp") {
+        ev.preventDefault();
+        if (!sonuc.length) return;
+        etkin = (etkin + (ev.key === "ArrowDown" ? 1 : sonuc.length - 1 + (etkin < 0 ? 1 : 0))) % sonuc.length;
+        isaretle();
+      } else if (ev.key === "Escape") kapat();
+    });
+    form.addEventListener("submit", function (ev) {
+      var x = sonuc[etkin < 0 ? 0 : etkin];
+      if (x && !list.hidden) { ev.preventDefault(); location.href = x.u; }
+    });
+    document.addEventListener("click", function (ev) { if (!form.contains(ev.target)) kapat(); });
+  });
+})();
+
+// /firma-ekle/: başvuru formu (il seçilince ilçeler dolar)
+var KAYIT_API = /^(localhost|127.0.0.1)$/.test(location.hostname) ? "http://127.0.0.1:8095" : "https://api.enyakinhurdacim.com.tr";
+(function () {
+  var form = document.getElementById("kayit-form");
+  if (!form) return;
+  var msg = document.getElementById("kayit-msg");
+  function say(t, ok) { msg.textContent = t; msg.className = "ekform__msg " + (ok ? "is-ok" : "is-err"); msg.hidden = false; }
+  form.il.addEventListener("change", function () {
+    var il = form.il.value;
+    form.ilce.innerHTML = '<option value="">' + (il ? "Bilmiyorum / il geneli" : "Önce il seçin") + "</option>";
+    if (!il) return;
+    fetch("/arama.json").then(function (r) { return r.json(); }).then(function (a) {
+      a.filter(function (x) { return x.i === il; }).forEach(function (x) {
+        var o = document.createElement("option"); o.value = x.s; o.textContent = x.a; form.ilce.appendChild(o);
+      });
+    });
+  });
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    if (form.ad.value.trim().length < 3) { say("Firma adını yazın."); form.ad.focus(); return; }
+    if (form.tel.value.replace(/\D/g, "").length < 10) { say("Geçerli bir telefon numarası yazın."); form.tel.focus(); return; }
+    if (!form.il.value) { say("İl seçin."); form.il.focus(); return; }
+    if (!form.onay.checked) { say("Yayınlanması için onay kutusunu işaretleyin."); return; }
+    var turler = [].map.call(form.querySelectorAll("input[name=turler]:checked"), function (c) { return c.value; });
+    var btn = form.querySelector("button[type=submit]"); btn.disabled = true; say("Gönderiliyor...", true);
+    fetch(KAYIT_API + "/kayit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
+      ad: form.ad.value, tel: form.tel.value, il: form.il.value, ilce: form.ilce.value, adres: form.adres.value, turler: turler,
+      eposta: form.eposta.value, not: form.not.value, onay: true, web: form.web.value }) })
+      .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+      .then(function (res) {
+        btn.disabled = false;
+        if (res.ok) { say("Başvurunuz alındı. İncelendikten sonra firmanız rehberde yayınlanacak. Teşekkür ederiz.", true); btn.hidden = true; }
+        else say(res.j.hata || "Bir hata oluştu, lütfen tekrar deneyin.");
+      }).catch(function () { btn.disabled = false; say("Bağlantı kurulamadı, lütfen tekrar deneyin."); });
+  });
+})();
+
+// Panelde onaylanan firmalar: bir sonraki derlemeye kadar il ve ilçe listelerinin başına eklenir.
+(function () {
+  var m = location.pathname.match(/^\/([a-z0-9-]+)-hurdaci\/$/);
+  var hedef = document.querySelector("ol.cards:not(#konum-liste)");
+  if (!m || !document.querySelector(".band")) return;
+  fetch(KAYIT_API + "/onayli.json").then(function (r) { return r.json(); }).then(function (a) {
+    a.filter(function (k) { return (k.il === m[1] || k.ilce === m[1]) && !document.querySelector('a[href="tel:' + k.tel + '"]'); }).forEach(function (k) {
+      if (!hedef) {  // firması olmayan ilçe sayfasında liste yoktur
+        var bol = document.createElement("section"); bol.innerHTML = '<ol class="cards"></ol>';
+        var kap = document.querySelector("main .wrap"); kap.insertBefore(bol, kap.firstChild);
+        hedef = bol.firstChild;
+      }
+      var li = document.createElement("li"); li.className = "card";
+      li.innerHTML = '<div class="card__head"><h3>' + ekEsc(k.ad) + "</h3></div>" + (k.adres ? '<p class="card__addr">' + ekEsc(k.adres) + "</p>" : "") +
+        (k.turler.length ? '<p class="card__tur">' + k.turler.map(function (t) { return "<span>" + ekEsc(t) + "</span>"; }).join("") + "</p>" : "") +
+        '<div class="card__act"><a class="btn" href="tel:' + ekEsc(k.tel) + '">' + ekEsc(k.telGoster) + '</a></div><p class="card__src">Kaynak: Firma beyanı</p>';
+      hedef.insertBefore(li, hedef.firstChild);
+    });
+  }).catch(function () {});
+})();
+
 // Firma telefonuna tıklama → dataLayer (GTM eklendiğinde ölçüm için)
 document.addEventListener("click", function (e) {
   var a = e.target.closest && e.target.closest("a[href^='tel:']");

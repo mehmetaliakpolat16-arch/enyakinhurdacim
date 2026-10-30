@@ -1,4 +1,5 @@
 User-agent: *
+Disallow: /panel/
 Allow: /
 
 Sitemap: https://enyakinhurdacim.com.tr/sitemap.xml
