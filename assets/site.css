@@ -214,3 +214,18 @@ section{padding:42px 0}
 .ekform__msg.is-ok{background:#eef6f0;border-color:#b9d9c4;color:#1f5a37}
 .ekform__msg.is-err{background:#fbeee8;border-color:#efc3ad;color:#8a3410}
 .ekform button[disabled]{opacity:.6;cursor:wait}
+
+/* Kampanya çizelgesi */
+.kmp{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:1px solid var(--line);border-radius:10px;overflow:hidden;margin:28px 0}
+.kmp th,.kmp td{padding:14px 16px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}
+.kmp tbody tr:last-child th,.kmp tbody tr:last-child td{border-bottom:0}
+.kmp thead th{background:var(--ink);color:#fff;font-weight:600}
+.kmp tbody th{font-weight:700;width:27%}
+.kmp__fiyat{width:21%;font-weight:600}
+.kmp__fiyat s{color:var(--mut);font-weight:400}
+.kmp__fiyat b{font-size:1.25rem;color:var(--rust-d)}
+.kmp__fiyat small{display:block;color:var(--ok)}
+.kmp__vurgu th,.kmp__vurgu td{background:var(--sand)}
+.kmp__haric .kmp__fiyat{color:var(--rust-d)}
+.kmp__act{margin:22px 0 14px;align-items:center}
+@media (max-width:640px){.kmp thead{display:none}.kmp,.kmp tbody,.kmp tr,.kmp th,.kmp td{display:block;width:auto}.kmp tbody th{padding-bottom:2px;border-bottom:0}.kmp td{padding-top:4px}.kmp td:not(.kmp__fiyat){border-bottom:0;padding-bottom:4px}}
