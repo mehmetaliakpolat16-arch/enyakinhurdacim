@@ -90,10 +90,12 @@ section{padding:42px 0}
 .card__km{background:var(--sand);border-radius:999px;padding:2px 9px;font-size:.8rem;font-weight:600;white-space:nowrap}
 .card__where{display:flex;align-items:center;gap:5px;margin:0;color:var(--mut);font-size:.9rem}
 .card__where svg{width:15px;height:15px;color:var(--rust)}
-.card__addr{margin:0;font-size:.88rem;color:var(--mut)}
+.card__bilgi{display:grid;grid-template-columns:auto 1fr;gap:3px 10px;margin:4px 0 0;padding-top:9px;border-top:1px solid var(--line);font-size:.84rem}
+.card__bilgi dt{color:var(--mut);font-weight:600}
+.card__bilgi dd{margin:0;min-width:0;overflow-wrap:anywhere}
 .card__tur{display:flex;flex-wrap:wrap;gap:4px;margin:2px 0}
 .card__tur span{background:var(--sand);border:1px solid var(--line);border-radius:5px;padding:0 7px;font-size:.78rem}
-.card__act{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.card__act{display:flex;gap:8px;flex-wrap:wrap;margin-top:auto;padding-top:6px}
 .card__src{margin:0;font-size:.74rem;color:#6f777b}
 .mats{list-style:none;margin:14px 0 0;padding:0;display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
 .mat a{position:relative;display:block;height:220px;border-radius:12px;overflow:hidden;background:var(--ink);color:#fff;text-decoration:none}

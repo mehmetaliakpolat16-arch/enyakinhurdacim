@@ -27,11 +27,13 @@
       (k.durum !== "red" ? '<button class="btn btn--ghost" data-k="red">Reddet</button>' : "") +
       (k.durum !== "bekliyor" ? '<button class="btn btn--ghost" data-k="bekliyor">Beklemeye al</button>' : "");
     return '<article class="pn-kart" data-id="' + k.id + '">' +
-      (var_ ? '<p class="ekform__msg is-err">Bu telefon rehberde kayıtlı: ' + esc(var_[0]) + " (" + esc(var_[1]) + ")</p>" : "") +
+      (var_ ? '<p class="ekform__msg is-err">Bu telefon rehberde kayıtlı: ' + esc(var_[0]) + " (" + esc(var_[1]) + "). Onaylarsanız doldurulan bilgiler o firmanın kartına işlenir.</p>" : "") +
       '<label class="fld"><span>Firma adı</span><input name="ad" value="' + esc(k.ad) + '"></label>' +
       '<label class="fld"><span>Adres</span><input name="adres" value="' + esc(k.adres) + '"></label>' +
+      '<label class="fld"><span>Web sitesi</span><input name="site" value="' + esc(k.site) + '"></label>' +
+      '<label class="fld"><span>E-posta</span><input name="eposta" value="' + esc(k.eposta) + '"></label>' +
       '<dl><dt>Telefon</dt><dd><a href="tel:' + esc(k.tel) + '">' + esc(k.telGoster) + "</a></dd><dt>Yer</dt><dd>" + esc(yer) + "</dd>" +
-      "<dt>Hurdalar</dt><dd>" + (esc(k.turler.join(", ")) || "-") + "</dd><dt>E-posta</dt><dd>" + (esc(k.eposta) || "-") + "</dd>" +
+      "<dt>Hurdalar</dt><dd>" + (esc(k.turler.join(", ")) || "-") + "</dd>" +
       "<dt>Not</dt><dd>" + (esc(k.not) || "-") + "</dd><dt>Başvuru</dt><dd>" + esc(k.tarih) + "</dd></dl>" +
       '<div class="card__act">' + dugme + "</div></article>";
   }
@@ -63,7 +65,11 @@
     if (!k) return;
     var a = ev.target.closest(".pn-kart");
     ev.target.disabled = true;
-    api("/panel/karar", { id: +a.getAttribute("data-id"), karar: k, ad: a.querySelector("[name=ad]").value, adres: a.querySelector("[name=adres]").value }).then(yukle).catch(function () {});
+    api("/panel/karar", { id: +a.getAttribute("data-id"), karar: k, ad: a.querySelector("[name=ad]").value, adres: a.querySelector("[name=adres]").value,
+      site: a.querySelector("[name=site]").value, eposta: a.querySelector("[name=eposta]").value }).then(function (j) {
+      if (j.hata) { ev.target.disabled = false; alert(j.hata); return; }
+      yukle();
+    }).catch(function () {});
   });
   fetch("/panel/mevcut.json").then(function (r) { return r.json(); }).then(function (m) { mevcut = m; }).catch(function () {});
   fetch("/arama.json").then(function (r) { return r.json(); }).then(function (a) {

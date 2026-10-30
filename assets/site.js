@@ -111,7 +111,7 @@ var KAYIT_API = /^(localhost|127.0.0.1)$/.test(location.hostname) ? "http://127.
     var turler = [].map.call(form.querySelectorAll("input[name=turler]:checked"), function (c) { return c.value; });
     var btn = form.querySelector("button[type=submit]"); btn.disabled = true; say("Gönderiliyor...", true);
     fetch(KAYIT_API + "/kayit", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({
-      ad: form.ad.value, tel: form.tel.value, il: form.il.value, ilce: form.ilce.value, adres: form.adres.value, turler: turler,
+      ad: form.ad.value, tel: form.tel.value, il: form.il.value, ilce: form.ilce.value, adres: form.adres.value, site: form.site.value, turler: turler,
       eposta: form.eposta.value, not: form.not.value, onay: true, web: form.web.value }) })
       .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
       .then(function (res) {
@@ -135,9 +135,12 @@ var KAYIT_API = /^(localhost|127.0.0.1)$/.test(location.hostname) ? "http://127.
         hedef = bol.firstChild;
       }
       var li = document.createElement("li"); li.className = "card";
-      li.innerHTML = '<div class="card__head"><h3>' + ekEsc(k.ad) + "</h3></div>" + (k.adres ? '<p class="card__addr">' + ekEsc(k.adres) + "</p>" : "") +
+      li.innerHTML = '<div class="card__head"><h3>' + ekEsc(k.ad) + "</h3></div>" +
         (k.turler.length ? '<p class="card__tur">' + k.turler.map(function (t) { return "<span>" + ekEsc(t) + "</span>"; }).join("") + "</p>" : "") +
-        '<div class="card__act"><a class="btn" href="tel:' + ekEsc(k.tel) + '">' + ekEsc(k.telGoster) + '</a></div><p class="card__src">Kaynak: Firma beyanı</p>';
+        '<div class="card__act"><a class="btn" href="tel:' + ekEsc(k.tel) + '">' + ekEsc(k.telGoster) + '</a></div><dl class="card__bilgi"><dt>Adres</dt><dd>' + ekEsc(k.adres) + "</dd><dt>Web sitesi</dt><dd>" +
+        (/^https?:\/\//.test(k.site) ? '<a href="' + ekEsc(k.site) + '" target="_blank" rel="noopener nofollow">' + ekEsc(k.site.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")) + "</a>" : "") +
+        "</dd><dt>E-posta</dt><dd>" + (k.eposta ? '<a href="mailto:' + ekEsc(k.eposta) + '">' + ekEsc(k.eposta) + "</a>" : "") +
+        '</dd></dl><p class="card__src">Kaynak: Firma beyanı</p>';
       hedef.insertBefore(li, hedef.firstChild);
     });
   }).catch(function () {});
