@@ -235,3 +235,4 @@ section{padding:42px 0}
 .kmp__haric .kmp__fiyat{color:var(--rust-d)}
 .kmp__act{margin:22px 0 14px;align-items:center}
 @media (max-width:640px){.kmp thead{display:none}.kmp,.kmp tbody,.kmp tr,.kmp th,.kmp td{display:block;width:auto}.kmp tbody th{padding-bottom:2px;border-bottom:0}.kmp td{padding-top:4px}.kmp td:not(.kmp__fiyat){border-bottom:0;padding-bottom:4px}}
+.il-rehber{margin:14px 0 0;padding:12px 14px;background:var(--sand);border-left:4px solid var(--rust);border-radius:8px;font-size:.95rem}
