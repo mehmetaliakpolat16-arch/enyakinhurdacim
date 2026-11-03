@@ -28,7 +28,7 @@ section{padding:42px 0}
 .top .wrap{display:flex;align-items:center;justify-content:space-between;min-height:68px;gap:18px;flex-wrap:wrap}
 .logo{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font-family:var(--serif);font-size:1.2rem;white-space:nowrap}
 .logo b{color:var(--gold)}
-.logo__pin{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:linear-gradient(180deg,var(--gold),var(--rust));color:var(--ink)}
+.logo img{display:block;height:46px;width:auto}
 .nav{display:flex;align-items:center;gap:20px;font-size:.92rem}
 .nav a{color:#cfd5d7;text-decoration:none;white-space:nowrap}
 .nav a:hover{color:#fff}
