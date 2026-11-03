@@ -134,8 +134,8 @@ var KAYIT_API = /^(localhost|127.0.0.1)$/.test(location.hostname) ? "http://127.
         var kap = document.querySelector("main .wrap"); kap.insertBefore(bol, kap.firstChild);
         hedef = bol.firstChild;
       }
-      var li = document.createElement("li"); li.className = "card";
-      li.innerHTML = '<div class="card__head"><h3>' + ekEsc(k.ad) + "</h3></div>" +
+      var li = document.createElement("li"); li.className = "card card--onayli";
+      li.innerHTML = '<div class="card__head"><h3>' + ekEsc(k.ad) + '</h3><span class="card__onay">✓ Onaylı</span></div>' +
         (k.turler.length ? '<p class="card__tur">' + k.turler.map(function (t) { return "<span>" + ekEsc(t) + "</span>"; }).join("") + "</p>" : "") +
         '<div class="card__act"><a class="btn" href="tel:' + ekEsc(k.tel) + '">' + ekEsc(k.telGoster) + '</a></div><dl class="card__bilgi"><dt>Adres</dt><dd>' + ekEsc(k.adres) + "</dd><dt>Web sitesi</dt><dd>" +
         (/^https?:\/\//.test(k.site) ? '<a href="' + ekEsc(k.site) + '" target="_blank" rel="noopener nofollow">' + ekEsc(k.site.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")) + "</a>" : "") +
